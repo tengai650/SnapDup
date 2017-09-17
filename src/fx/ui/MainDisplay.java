@@ -30,8 +30,6 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Callback;
-
-import tools.Pair;
 import data.DupData;
 import data.GenerateScriptContainer;
 import data.ObservableDataContainer;
@@ -41,6 +39,7 @@ import fx.ui.callbacks.TableCheckBoxCellFactory;
 import fx.ui.cell.FileTableCellFactory;
 import fx.ui.listeners.TableViewSelection;
 import util.ObjectEventDispatcher;
+import util.Pair;
 
 
 public class MainDisplay implements Initializable

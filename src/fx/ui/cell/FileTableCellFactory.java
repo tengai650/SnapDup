@@ -5,7 +5,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.util.Callback;
-import tools.Pair;
+import util.Pair;
 
 public class FileTableCellFactory implements Callback<TableColumn<DupData, String>, TableCell<DupData, String>>
 {
