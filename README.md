@@ -9,11 +9,21 @@ as a shell script for execution.
 
 
 Commands:
-    ctrl-a  select all
+    ctrl-a,  To select all
 
-SnapDup requires the lastest release of java 1.8 (or OpenJDK) with javaFX which is included with a Windows install.
-Linux however may not include javaFX and will need to be installed manaually.
+SnapDup requires the lastest release of java 1.8 (or OpenJDK) with javaFX which is included with a java Windows install.
+Linux however may not include javaFX and will need to be installed manaually. If SnapDup doesn't run and you get an 
+error: can't find or load  main.SnapDup - then javaFX is not installed.
 
+
+Verify java 1.8 installation:
+-----------------------------
+
+    java -version
+ 
+    openjdk version "1.8.0_144"
+    OpenJDK Runtime Environment (IcedTea 3.5.1) (suse-10.13.3-x86_64)
+    OpenJDK 64-Bit Server VM (build 25.144-b01, mixed mode)
 
 Windows - how to run 
 --------------------
@@ -37,8 +47,12 @@ Linux - how to run
     https://chriswhocodes.com/downloads/openjfx-8-sdk-overlay-linux-amd64.zip 
 
     To install 'openjfx-8-sdk-overlay-linux-amd64.zip' use script:
-    !/bin/ksh
-    JDK_HOME=/usr/lib64/jvm/java-1.8.0-openjdk-1.8.0
-    sudo 7z x -o$JDK_HOME openjfx-8-sdk-overlay-linux-amd64.zip jre
+    
+        !/bin/ksh
+        JDK_HOME=/usr/lib64/jvm/java-1.8.0-openjdk-1.8.0
+        sudo 7z x -o$JDK_HOME openjfx-8-sdk-overlay-linux-amd64.zip jre
 
     (you may need to update JDK_HOME to match your enviroment)
+    
+    
+    SnapDup was built with Eclipse.
