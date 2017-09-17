@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+
+<BorderPane prefHeight="600.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fx.ui.MainDisplay">
+   <top>
+      <ToolBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+        <items>
+          <Button fx:id="btnOpen" mnemonicParsing="false" onAction="#btnOpenAction" style="-fx-font-size: 11;" text="Open" />
+            <Button fx:id="btnDelete" disable="true" layoutX="10.0" layoutY="13.0" mnemonicParsing="false" onAction="#btnDeleteAction" style="-fx-font-size: 11;" text="Delete" />
+            <Button fx:id="btnGenerateScript" disable="true" layoutX="10.0" layoutY="13.0" mnemonicParsing="false" onAction="#btnGenerateScriptAction" prefHeight="25.0" prefWidth="104.0" style="-fx-font-size: 11;" text="Generate Script" />
+            <Separator orientation="VERTICAL">
+               <padding>
+                  <Insets left="5.0" right="3.0" />
+               </padding>
+            </Separator>
+            <Button fx:id="btnAbout" layoutX="10.0" layoutY="13.0" mnemonicParsing="false" onAction="#btnAboutAction" style="-fx-font-size: 11;" text="About" />
+        </items>
+      </ToolBar>
+   </top>
+   <center>
+      <SplitPane dividerPositions="0.75" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" BorderPane.alignment="CENTER">
+        <items>
+          <AnchorPane prefWidth="830.0">
+               <children>
+                  <ScrollPane fitToHeight="true" fitToWidth="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <content>
+                        <TableView fx:id="dupTableView" accessibleRole="BUTTON" editable="true" prefHeight="200.0" prefWidth="200.0">
+                          <columns>
+                            <TableColumn fx:id="chkOneColumn" maxWidth="-Infinity" minWidth="25.0" prefWidth="25.0" resizable="false" sortable="false" text="X" />
+                            <TableColumn fx:id="deviceOneColumn" editable="false" prefWidth="50.0" text="Device" />
+                              <TableColumn fx:id="fileOneColumn" editable="false" prefWidth="300.0" text="File One" />
+                              <TableColumn fx:id="chkTwoColumn" maxWidth="-Infinity" minWidth="25.0" prefWidth="25.0" resizable="false" sortable="false" text="X" />
+                              <TableColumn fx:id="deviceTwoColumn" editable="false" prefWidth="50.0" text="Device" />
+                              <TableColumn fx:id="fileTwoColumn" editable="false" prefWidth="300.0" text="File Two" />
+                              <TableColumn fx:id="sizeColumn" editable="false" minWidth="0.0" prefWidth="100.0" text="Size" />
+                          </columns>
+                        </TableView>
+                     </content>
+                  </ScrollPane>
+               </children>
+            </AnchorPane>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+               <children>
+                  <ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <content>
+                        <TextArea fx:id="txtArea" prefHeight="200.0" prefWidth="200.0" />
+                     </content>
+                  </ScrollPane>
+               </children>
+            </AnchorPane>
+        </items>
+      </SplitPane>
+   </center>
+</BorderPane>
