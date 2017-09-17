@@ -44,7 +44,7 @@ Linux - how to run
 ------------------
     java -jar snapdup.jar
 
-    If your Linux installation of OpenJDK does include javaFX you can download from: 
+    If your Linux installation of OpenJDK does not include javaFX you can download from: 
     https://chriswhocodes.com/downloads/openjfx-8-sdk-overlay-linux-amd64.zip 
 
     To install 'openjfx-8-sdk-overlay-linux-amd64.zip' use script:
