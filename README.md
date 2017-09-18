@@ -47,7 +47,7 @@ Linux - how to run
     If your Linux installation of OpenJDK does not include javaFX you can download from: 
     https://chriswhocodes.com/downloads/openjfx-8-sdk-overlay-linux-amd64.zip 
 
-    To install 'openjfx-8-sdk-overlay-linux-amd64.zip' use script:
+    To install 'openjfx-8-sdk-overlay-linux-amd64.zip' use script (tested on OpenSUSE):
     
         !/bin/ksh
         JDK_HOME=/usr/lib64/jvm/java-1.8.0-openjdk-1.8.0
