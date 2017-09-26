@@ -36,9 +36,12 @@ public class GenerateScriptTask extends Task<String>
 		for(Entry<String, String> entry : dataContainer.getDeviceMap().entrySet())
 		{
 			if(isWindows)
+			{
 				buff.append("set ");
-
-			buff.append(entry.getKey().toUpperCase()).append("=").append(entry.getValue()).append("\n");
+				buff.append(entry.getKey().toUpperCase()).append("=").append(entry.getValue().replace('/', '\\')).append("\n");
+			}
+			else
+				buff.append(entry.getKey().toUpperCase()).append("=").append(entry.getValue()).append("\n");
 		}
 		
 		for(int i = 0; i < leftList.size(); i++)
@@ -46,20 +49,28 @@ public class GenerateScriptTask extends Task<String>
 			if(leftList.get(i).get())
 			{
 				if(isWindows)
+				{
 					buff.append("del \"%").append(dupDataList.get(i).getDevice1().toUpperCase()).append("%");
+					buff.append(dupDataList.get(i).getFile1().replace('/', '\\')).append("\"\n");
+				}
 				else
-					buff.append("rm \"$").append(dupDataList.get(i).getDevice1().toUpperCase()).append("\"\"");
-				
-				buff.append(dupDataList.get(i).getFile1()).append("\"\n");
+				{
+					buff.append("rm \"${").append(dupDataList.get(i).getDevice1().toUpperCase()).append("}");
+					buff.append(dupDataList.get(i).getFile1()).append("\"\n");
+				}
 			}
 			else if(rightList.get(i).get())
 			{
 				if(isWindows)
+				{
 					buff.append("del \"%").append(dupDataList.get(i).getDevice2().toUpperCase()).append("%");
+					buff.append(dupDataList.get(i).getFile2().replace('/', '\\')).append("\"\n");
+				}
 				else
-					buff.append("rm \"$").append(dupDataList.get(i).getDevice2().toUpperCase()).append("\"\"");
-				
-				buff.append(dupDataList.get(i).getFile2()).append("\"\n");
+				{
+					buff.append("rm \"${").append(dupDataList.get(i).getDevice2().toUpperCase()).append("}");
+					buff.append(dupDataList.get(i).getFile2()).append("\"\n");
+				}
 			}
 		}
 		

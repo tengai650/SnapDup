@@ -4,13 +4,20 @@ import java.io.EOFException;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Deque;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.ResourceBundle;
 
 import javafx.application.Platform;
 import javafx.beans.property.BooleanPropertyBase;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -19,6 +26,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.OverrunStyle;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -30,13 +38,16 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Callback;
+import data.DeviceListContainer;
 import data.DupData;
 import data.GenerateScriptContainer;
 import data.ObservableDataContainer;
+import fx.concurrent.task.DeleteTask;
 import fx.concurrent.task.DupParserTask;
 import fx.concurrent.task.GenerateScriptTask;
-import fx.ui.callbacks.TableCheckBoxCellFactory;
+import fx.ui.cell.FileSizePropertyFactory;
 import fx.ui.cell.FileTableCellFactory;
+import fx.ui.cell.TableCheckBoxCellFactory;
 import fx.ui.listeners.TableViewSelection;
 import util.ObjectEventDispatcher;
 import util.Pair;
@@ -52,6 +63,10 @@ public class MainDisplay implements Initializable
 	private Button btnDelete;
 	@FXML
 	private Button btnGenerateScript;
+	@FXML
+	private Button btnMapDevices;
+	@FXML
+	private Button btnOverRun;
 	@FXML
 	private Button btnAbout;
 	@FXML
@@ -69,10 +84,13 @@ public class MainDisplay implements Initializable
 	@FXML
 	private TableColumn<DupData, String> fileTwoColumn;
 	@FXML
-	private TableColumn<DupData, Long> sizeColumn;
+	private TableColumn<DupData, String> sizeColumn;
 		
-	ObservableDataContainer dataContainer;
-	int totalSelected = 0; // Used to keep track whether to dim btnDelete and btnGenerateScript. When '0' buttons are dimmed.
+	private OverrunStyle overrunStyle = OverrunStyle.ELLIPSIS;
+	private List<ObjectProperty<OverrunStyle>> propertyList = new ArrayList<>();
+	private Deque<OverrunStyle> overrunStyleDeque = new ArrayDeque<>();
+	private ObservableDataContainer dataContainer;
+	private int totalSelected = 0; // Used to keep track whether to dim btnDelete and btnGenerateScript. When '0' buttons are dimmed.
 	
 	private class PropertyListener implements ChangeListener<Boolean>
 	{
@@ -86,7 +104,7 @@ public class MainDisplay implements Initializable
 				
 				if(totalSelected == 1)
 				{
-					// btnDelete.setDisable(false);
+					btnDelete.setDisable(false);
 					btnGenerateScript.setDisable(false);
 				}
 			}
@@ -97,7 +115,7 @@ public class MainDisplay implements Initializable
 				
 				if(totalSelected == 0)
 				{
-					// btnDelete.setDisable(true);
+					btnDelete.setDisable(true);
 					btnGenerateScript.setDisable(true);
 				}
 			}
@@ -159,9 +177,23 @@ public class MainDisplay implements Initializable
 			return null;
 		}	
 	}
+	
+	private class UpdateDeviceLocationCallBack implements Callback<Pair<String, String>, Void>
+	{
+
+		@Override
+		public Void call(Pair<String, String> param)
+		{
+		
+			return null;
+		}
+		
+	}
 		
 	public MainDisplay()
 	{
+		overrunStyleDeque.add(OverrunStyle.LEADING_ELLIPSIS);
+		overrunStyleDeque.add(OverrunStyle.CENTER_ELLIPSIS);
 	}
 	
 	@Override
@@ -169,7 +201,7 @@ public class MainDisplay implements Initializable
 	{
 		ObjectEventDispatcher.addEvent(GenerateScriptContainer.class, data -> objectEvent(data));
 		ObjectEventDispatcher.addEvent(ObservableDataContainer.class, data -> objectEvent(data));
-		ObjectEventDispatcher.addEvent(ObservableDataContainer.class, data -> objectEvent(data));
+		ObjectEventDispatcher.addEvent(DeviceListContainer.class, data -> objectEvent(data));
 		
 		dupTableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 		/* add listener to sync TableView click with ListView */
@@ -178,14 +210,14 @@ public class MainDisplay implements Initializable
 		/* add callback to left checkbox */
 		chkOneColumn.setCellFactory(new TableCheckBoxCellFactory<DupData>(new CheckBoxLeftCallBack()));
 		deviceOneColumn.setCellValueFactory(new PropertyValueFactory<DupData, String>("device1"));
-		fileOneColumn.setCellFactory(new FileTableCellFactory(new SelectLeftCallBack()));
+		fileOneColumn.setCellFactory(new FileTableCellFactory(new SelectLeftCallBack(), propertyList));
 		fileOneColumn.setCellValueFactory(new PropertyValueFactory<DupData, String>("File1"));
 		/* add callback to right checkbox */
 		chkTwoColumn.setCellFactory(new TableCheckBoxCellFactory<DupData>(new CheckBoxRightCallBack()));
 		deviceTwoColumn.setCellValueFactory(new PropertyValueFactory<DupData, String>("device2"));
-		fileTwoColumn.setCellFactory(new FileTableCellFactory(new SelectRightCallBack()));
+		fileTwoColumn.setCellFactory(new FileTableCellFactory(new SelectRightCallBack(), propertyList));
 		fileTwoColumn.setCellValueFactory(new PropertyValueFactory<DupData, String>("File2"));
-		sizeColumn.setCellValueFactory(new PropertyValueFactory<DupData, Long>("Size"));
+		sizeColumn.setCellValueFactory(new FileSizePropertyFactory());// new PropertyValueFactory<DupData, Long>("Size"));
 		
 		chkOneColumn.setId("ChkLeft");
 		chkTwoColumn.setId("ChkRight");
@@ -196,10 +228,13 @@ public class MainDisplay implements Initializable
 	@FXML
 	private void btnOpenAction()
 	{
-		// String fileName = "\\\\LEAP-MEDIA\\data\\dup.out";
 		FileChooser fileChooser = new FileChooser();
 		File file = fileChooser.showOpenDialog(null);
+		// String fileName = "\\\\LEAP-MEDIA\\data\\dup.out";
 		// File file = new File(fileName);
+		
+		if(file == null)
+			return;		
 		
 		try
 		{		
@@ -210,8 +245,10 @@ public class MainDisplay implements Initializable
 			th.setDaemon(true);
 			th.start();
 			
-			// btnDelete.setDisable(true);
+			btnDelete.setDisable(true);
 			btnGenerateScript.setDisable(true);
+			btnOverRun.setDisable(false);
+			btnMapDevices.setDisable(false);
 			totalSelected = 0;
 		}
 		catch (EOFException e)
@@ -223,7 +260,40 @@ public class MainDisplay implements Initializable
 	@FXML
 	private void btnDeleteAction()
 	{
-		// Not implemented at this time.
+		try
+		{
+		    FXMLLoader loader = new FXMLLoader(MainDisplay.class.getResource("/fxml/DeleteResultDialog.fxml"));
+		    Parent root = loader.load();
+		    Scene scene = new Scene(root);
+		    Stage stage = new Stage();
+		    
+		    stage.initModality(Modality.APPLICATION_MODAL);
+		    stage.initStyle(StageStyle.UNDECORATED);
+		    stage.setScene(scene);
+		    stage.show();
+		    
+		    Node node = scene.lookup("#txtArea");
+		    
+		    if(node instanceof TextArea)
+		    {
+		    	TextArea textArea = (TextArea)node;
+		    	
+		    	DeleteTask task = new DeleteTask(dataContainer);
+		    	
+		    	textArea.textProperty().bind(task.valueProperty());
+		    	
+		    	Thread th = new Thread(task);
+				th.setDaemon(true);
+				th.start();
+		    }
+		    else
+		    	throw new IOException("Unable to find \"TextArea\" node");
+		    
+		}
+		catch(IOException e)
+		{
+		    e.printStackTrace();
+		}
 	}
 	
 	@FXML
@@ -271,6 +341,56 @@ public class MainDisplay implements Initializable
 	}
 	
 	@FXML
+	private void btnOverRunAction()
+	{
+		overrunStyleDeque.add(overrunStyle); // Recycle the last overrunStyle.
+		overrunStyle = overrunStyleDeque.pop(); // 
+			
+		propertyList.forEach(prop -> prop.setValue(overrunStyle));
+		
+		if(overrunStyle == OverrunStyle.ELLIPSIS)
+			btnOverRun.setText("...<<");
+		else if(overrunStyle == OverrunStyle.CENTER_ELLIPSIS)
+			btnOverRun.setText(">>...");
+		else
+			btnOverRun.setText(">...<");
+	}
+	
+	@FXML
+	private void btnMapDevicesAction()
+	{
+		try
+		{
+		    FXMLLoader loader = new FXMLLoader(MainDisplay.class.getResource("/fxml/MapDevicesDialog.fxml"));
+		    Parent root = loader.load();
+		    Scene scene = new Scene(root);
+		    Stage stage = new Stage();
+		    stage.initModality(Modality.APPLICATION_MODAL);
+		    stage.initStyle(StageStyle.UNDECORATED);
+		    stage.setScene(scene);
+		    stage.show();
+		    
+		    Node node = scene.lookup("#tblMapDevice");
+		    
+		    if(node instanceof TableView)
+		    {
+		    	TableView<Pair<String, String>> table = (TableView)node;
+		    	ArrayList<Pair<String, String>> pairList = new ArrayList<>();
+		    	
+		    	dataContainer.getDeviceMap().entrySet().forEach(entry -> pairList.add(new Pair<String, String>(entry.getKey(), entry.getValue())));
+		    	
+		    	ObservableList<Pair<String, String>> tableModel = FXCollections.<Pair<String, String>> observableArrayList(pairList);
+		    	    	
+		    	table.setItems(tableModel);
+		    }
+		}
+		catch(IOException e)
+		{
+		    e.printStackTrace();
+		}
+	}
+	
+	@FXML
 	private void btnAboutAction()
 	{
 		try
@@ -307,6 +427,13 @@ public class MainDisplay implements Initializable
 				rightList.get(i).addListener(propertyListener);
 			}
 		});
+	}
+	
+	private void objectEvent(final DeviceListContainer container)
+	{
+		Map<String, String> deviceMap = dataContainer.getDeviceMap();
+		
+		container.deviceList.forEach(pair -> deviceMap.put(pair.first, pair.second));
 	}
 	
 	private void objectEvent(final GenerateScriptContainer container) 

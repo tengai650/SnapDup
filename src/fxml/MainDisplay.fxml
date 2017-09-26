@@ -21,9 +21,26 @@
       <ToolBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
         <items>
           <Button fx:id="btnOpen" mnemonicParsing="false" onAction="#btnOpenAction" style="-fx-font-size: 11;" text="Open" />
+            <Separator layoutX="217.0" layoutY="10.0" orientation="VERTICAL">
+               <padding>
+                  <Insets left="5.0" right="3.0" />
+               </padding>
+            </Separator>
             <Button fx:id="btnDelete" disable="true" layoutX="10.0" layoutY="13.0" mnemonicParsing="false" onAction="#btnDeleteAction" style="-fx-font-size: 11;" text="Delete" />
             <Button fx:id="btnGenerateScript" disable="true" layoutX="10.0" layoutY="13.0" mnemonicParsing="false" onAction="#btnGenerateScriptAction" prefHeight="25.0" prefWidth="104.0" style="-fx-font-size: 11;" text="Generate Script" />
+            <Separator layoutX="57.0" layoutY="10.0" orientation="VERTICAL">
+               <padding>
+                  <Insets left="5.0" right="3.0" />
+               </padding>
+            </Separator>
+            <Button fx:id="btnMapDevices" disable="true" mnemonicParsing="false" onAction="#btnMapDevicesAction" style="-fx-font-size: 11;" text="Map Devices" />
             <Separator orientation="VERTICAL">
+               <padding>
+                  <Insets left="5.0" right="3.0" />
+               </padding>
+            </Separator>
+            <Button fx:id="btnOverRun" disable="true" mnemonicParsing="false" onAction="#btnOverRunAction" style="-fx-font-size: 11;" text="...&lt;&lt;" />
+            <Separator layoutX="217.0" layoutY="10.0" orientation="VERTICAL">
                <padding>
                   <Insets left="5.0" right="3.0" />
                </padding>

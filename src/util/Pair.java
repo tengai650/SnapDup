@@ -10,4 +10,7 @@ public class Pair<T, T1>
 		first = f;
 		second = s;
     }
+    
+    public T getFirst() { return first; }
+    public T1 getSecond() { return second; }
 }

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.BorderPane?>
+
+
+<BorderPane prefHeight="500.0" prefWidth="500.0" style="-fx-border-width: 1; -fx-border-radius: 5; -fx-border-color: midnightblue;" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.141" fx:controller="fx.ui.dialog.DeleteResultDialog">
+   <center>
+      <ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+        <content>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="204.0">
+               <children>
+                  <TextArea fx:id="txtArea" prefHeight="200.0" prefWidth="200.0" style="-fx-border-radius: 5;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+               </children>
+            </AnchorPane>
+        </content>
+      </ScrollPane>
+   </center>
+   <bottom>
+      <HBox alignment="CENTER" prefHeight="47.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <children>
+            <Button fx:id="btnOk" mnemonicParsing="false" onAction="#btnOKAction" text="Ok" />
+         </children>
+      </HBox>
+   </bottom>
+</BorderPane>

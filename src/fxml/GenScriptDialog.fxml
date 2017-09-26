@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 
-<BorderPane prefHeight="500.0" prefWidth="500.0" style="-fx-border-width: 1; -fx-border-radius: 5; -fx-border-color: midnightblue;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fx.ui.dialog.GenerateScriptDialog">
+<BorderPane prefHeight="500.0" prefWidth="500.0" style="-fx-border-width: 1; -fx-border-radius: 5; -fx-border-color: midnightblue;" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fx.ui.dialog.GenerateScriptDialog">
    <center>
       <AnchorPane minHeight="-Infinity" minWidth="-Infinity" BorderPane.alignment="CENTER">
          <children>
@@ -62,6 +62,7 @@
                   <Button fx:id="btnOk" mnemonicParsing="false" onAction="#btnOKAction" text="Ok" />
                </children>
             </HBox>
+            <Button fx:id="btnSave" mnemonicParsing="false" onAction="#btnSaveAction" text="Save" />
          </children>
       </HBox>
    </bottom>
