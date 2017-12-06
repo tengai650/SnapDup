@@ -52,7 +52,7 @@ Linux - how to run
         JDK_HOME=/usr/lib64/jvm/java-1.8.0-openjdk-1.8.0
         sudo 7z x -o$JDK_HOME openjfx-8-sdk-overlay-linux-amd64.zip jre
 
-        * Update JDK_HOME to match your enviroment.
-        * This script requires 7zip to be installed.
+    * Update JDK_HOME to match your enviroment.
+    * This script requires 7zip to be installed.
     
     SnapDup was built with Eclipse.
