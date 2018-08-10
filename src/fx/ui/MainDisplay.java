@@ -45,6 +45,7 @@ import data.ObservableDataContainer;
 import fx.concurrent.task.DeleteTask;
 import fx.concurrent.task.DupParserTask;
 import fx.concurrent.task.GenerateScriptTask;
+import fx.ui.cell.FileSizeCellFactory;
 import fx.ui.cell.FileSizePropertyFactory;
 import fx.ui.cell.FileTableCellFactory;
 import fx.ui.cell.TableCheckBoxCellFactory;
@@ -84,7 +85,7 @@ public class MainDisplay implements Initializable
 	@FXML
 	private TableColumn<DupData, String> fileTwoColumn;
 	@FXML
-	private TableColumn<DupData, String> sizeColumn;
+	private TableColumn<DupData, Long> sizeColumn;
 		
 	private OverrunStyle overrunStyle = OverrunStyle.ELLIPSIS;
 	private List<ObjectProperty<OverrunStyle>> propertyList = new ArrayList<>();
@@ -217,8 +218,9 @@ public class MainDisplay implements Initializable
 		deviceTwoColumn.setCellValueFactory(new PropertyValueFactory<DupData, String>("device2"));
 		fileTwoColumn.setCellFactory(new FileTableCellFactory(new SelectRightCallBack(), propertyList));
 		fileTwoColumn.setCellValueFactory(new PropertyValueFactory<DupData, String>("File2"));
-		sizeColumn.setCellValueFactory(new FileSizePropertyFactory());// new PropertyValueFactory<DupData, Long>("Size"));
-		
+		sizeColumn.setCellValueFactory(new PropertyValueFactory<DupData, Long>("Size"));// new PropertyValueFactory<DupData, Long>("Size"));
+                
+		sizeColumn.setCellFactory(new FileSizeCellFactory());
 		chkOneColumn.setId("ChkLeft");
 		chkTwoColumn.setId("ChkRight");
 		fileOneColumn.setId("FileLeft");
